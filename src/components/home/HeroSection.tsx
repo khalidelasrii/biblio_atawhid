@@ -14,10 +14,10 @@ export const HeroSection: React.FC = () => {
               <span className="text-orange-500 block">confiance</span>
             </h1>
             <p className="text-xl text-gray-600 mb-8 max-w-2xl">
-              Découvrez notre large gamme de livres scolaires, fournitures, services d'impression 
+              Découvrez notre large gamme de livres scolaires, fournitures, services d'impression
               et papeterie pour tous vos besoins éducatifs et professionnels.
             </p>
-            
+
             <div className="flex flex-col sm:flex-row gap-4 mb-12">
               <Button size="lg" className="px-8">
                 Découvrir nos produits
@@ -39,8 +39,8 @@ export const HeroSection: React.FC = () => {
                 <div className="text-sm text-gray-600">Clients satisfaits</div>
               </div>
               <div>
-                <div className="text-2xl font-bold text-gray-900">Agadir</div>
-                <div className="text-sm text-gray-600">Hay Mohammadi</div>
+                <div className="text-2xl font-bold text-gray-900">Témara</div>
+                <div className="text-sm text-gray-600">Maroc</div>
               </div>
             </div>
           </div>
@@ -54,7 +54,7 @@ export const HeroSection: React.FC = () => {
                 className="w-full h-96 lg:h-[500px] object-cover rounded-2xl shadow-2xl"
               />
             </div>
-            
+
             {/* Floating cards */}
             <div className="absolute -top-6 -left-6 bg-white p-4 rounded-xl shadow-lg z-20">
               <div className="flex items-center space-x-3">
@@ -67,7 +67,7 @@ export const HeroSection: React.FC = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className="absolute -bottom-6 -right-6 bg-white p-4 rounded-xl shadow-lg z-20">
               <div className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">

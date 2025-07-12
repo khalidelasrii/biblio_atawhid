@@ -34,7 +34,7 @@ export const Contact: React.FC = () => {
           Contactez-nous
         </h1>
         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-          Nous sommes là pour vous aider. N'hésitez pas à nous contacter pour toute question 
+          Nous sommes là pour vous aider. N'hésitez pas à nous contacter pour toute question
           ou demande d'information.
         </p>
       </div>
@@ -46,7 +46,7 @@ export const Contact: React.FC = () => {
             <h2 className="text-2xl font-bold text-gray-900 mb-6">
               Informations de contact
             </h2>
-            
+
             <div className="space-y-6">
               <div className="flex items-start space-x-4">
                 <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -80,11 +80,11 @@ export const Contact: React.FC = () => {
                   <div className="text-gray-600">
                     <p>مكتبة التوحيد</p>
                     <p>Biblio Atawhid</p>
-                    <p>Hay Mohammadi, Agadir 80000</p>
+                    <p>Témara 12000</p>
                     <p>Maroc</p>
-                    <a 
-                      href="https://maps.app.goo.gl/LPi9PugghDnX8M3C6" 
-                      target="_blank" 
+                    <a
+                      href="https://www.google.com/maps/place/%D9%85%D9%83%D8%AA%D8%A8%D8%A9+%D8%A7%D9%84%D8%AA%D9%88%D8%AD%D9%8A%D8%AF%E2%80%AD/@33.8650722,-6.9286219,17z/data=!3m1!4b1!4m6!3m5!1s0xda70f437f835e1f:0x88cbf391fb4a6605!8m2!3d33.8650722!4d-6.926047!16s%2Fg%2F11rxhkgll0?entry=ttu&g_ep=EgoyMDI1MDcwOS4wIKXMDSoASAFQAw%3D%3D"
+                      target="_blank"
                       rel="noopener noreferrer"
                       className="text-orange-500 hover:text-orange-600 text-sm font-medium inline-flex items-center mt-1"
                     >
@@ -117,24 +117,24 @@ export const Contact: React.FC = () => {
           <Card className="overflow-hidden">
             <div className="w-full h-64">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3449.8234567890123!2d-9.598765432109876!3d30.123456789012345!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzDCsDA3JzI0LjQiTiA5wrAzNScxOS42Ilc!5e0!3m2!1sfr!2sma!4v1234567890123!5m2!1sfr!2sma"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3320.8650722!2d-6.9286219!3d33.8650722!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xda70f437f835e1f%3A0x88cbf391fb4a6605!2z2YXZg9iq2KjYqSDYp9mE2KrZiNit2YrYrw!5e0!3m2!1sfr!2sma!4v1720775200000!5m2!1sfr!2sma"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title="Localisation Biblio Atawhid"
+                title="Localisation Biblio Atawhid - Témara"
               />
             </div>
             <div className="p-4">
               <h3 className="font-semibold text-gray-900 mb-2">Notre Localisation</h3>
               <p className="text-gray-600 text-sm">
-                Trouvez-nous facilement à Hay Mohammadi, Agadir. Parking disponible à proximité.
+                Trouvez-nous facilement à Témara. Parking disponible à proximité.
               </p>
-              <a 
-                href="https://maps.app.goo.gl/LPi9PugghDnX8M3C6" 
-                target="_blank" 
+              <a
+                href="https://www.google.com/maps/place/%D9%85%D9%83%D8%AA%D8%A8%D8%A9+%D8%A7%D9%84%D8%AA%D9%88%D8%AD%D9%8A%D8%AF%E2%80%AD/@33.8650722,-6.9286219,17z/data=!3m1!4b1!4m6!3m5!1s0xda70f437f835e1f:0x88cbf391fb4a6605!8m2!3d33.8650722!4d-6.926047!16s%2Fg%2F11rxhkgll0?entry=ttu&g_ep=EgoyMDI1MDcwOS4wIKXMDSoASAFQAw%3D%3D"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center text-orange-500 hover:text-orange-600 font-medium text-sm mt-2"
               >
@@ -152,7 +152,7 @@ export const Contact: React.FC = () => {
           <h2 className="text-2xl font-bold text-gray-900 mb-6">
             Envoyez-nous un message
           </h2>
-          
+
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Input

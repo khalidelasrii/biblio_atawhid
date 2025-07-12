@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import {
   BookOpen,
@@ -8,16 +7,28 @@ import {
   Star,
   MapPin,
   Phone,
-  Mail,
   Clock
 } from 'lucide-react';
+import headImage from '../assets/head.png';
 
 const Home = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-orange-500 to-orange-600 text-white">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <section
+        className="relative bg-gradient-to-r from-orange-500 to-orange-600 text-white"
+        style={{
+          backgroundImage: `url(${headImage})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
+        {/* Overlay pour l'opacité */}
+        <div className="absolute inset-0 bg-gradient-to-r from-orange-500/80 to-orange-600/80"></div>
+
+        {/* Contenu */}
+        <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
               Librairie Al-Tawhid
@@ -319,8 +330,20 @@ const Home = () => {
               </div>
               <h3 className="text-xl font-semibold mb-2">Adresse</h3>
               <p className="text-lg">
-                [Votre adresse]<br />
-                Casablanca, Maroc
+                <div>
+                  <p>Biblio Atawhid</p>
+                  <p>Témara 12000</p>
+                  <p>Maroc</p>
+                  <a
+                    href="https://www.google.com/maps/place/%D9%85%D9%83%D8%AA%D8%A8%D8%A9+%D8%A7%D9%84%D8%AA%D9%88%D8%AD%D9%8A%D8%AF%E2%80%AD/@33.8650722,-6.9286219,17z/data=!3m1!4b1!4m6!3m5!1s0xda70f437f835e1f:0x88cbf391fb4a6605!8m2!3d33.8650722!4d-6.926047!16s%2Fg%2F11rxhkgll0?entry=ttu&g_ep=EgoyMDI1MDcwOS4wIKXMDSoASAFQAw%3D%3D"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-green-400 hover:text-orange-300 text-sm"
+                  >
+                    Voir sur Google Maps
+                  </a>
+                  <br />
+                </div>
               </p>
             </div>
 
@@ -331,7 +354,7 @@ const Home = () => {
               </div>
               <h3 className="text-xl font-semibold mb-2">Téléphone</h3>
               <p className="text-lg">
-                +212 [Votre numéro]
+                +212 6 04 41 53 02
               </p>
             </div>
 
@@ -342,8 +365,8 @@ const Home = () => {
               </div>
               <h3 className="text-xl font-semibold mb-2">Horaires</h3>
               <p className="text-lg">
-                Lun - Sam: 8h - 19h<br />
-                Dim: 9h - 17h
+                Lun - Sam: 8h - 23h<br />
+                Dim: 11h - 23h
               </p>
             </div>
           </div>

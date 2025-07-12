@@ -1,9 +1,8 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import { Header } from './components/layout/Header';
+import Header from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
-import { Home } from './pages/Home';
+import Home from './pages/Home';
 import { Products } from './pages/Products';
 import { Contact } from './pages/Contact';
 

@@ -18,14 +18,24 @@ export const Footer: React.FC = () => {
               </div>
             </div>
             <p className="text-gray-300 mb-6 max-w-md">
-              Votre librairie de confiance pour tous vos besoins scolaires, universitaires et professionnels. 
+              Votre librairie de confiance pour tous vos besoins scolaires, universitaires et professionnels.
               Nous offrons une large gamme de livres, fournitures scolaires et services d'impression de qualité.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center hover:bg-orange-500 transition-colors">
+              <a
+                href="https://www.facebook.com/profile.php?id=61550664507674&locale=fr_FR"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center hover:bg-orange-500 transition-colors"
+              >
                 <Facebook className="w-4 h-4" />
               </a>
-              <a href="#" className="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center hover:bg-orange-500 transition-colors">
+              <a
+                href="https://www.instagram.com/librairieatawhid29"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center hover:bg-orange-500 transition-colors"
+              >
                 <Instagram className="w-4 h-4" />
               </a>
               <a href="#" className="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center hover:bg-orange-500 transition-colors">
@@ -53,33 +63,36 @@ export const Footer: React.FC = () => {
               <div className="flex items-center space-x-3">
                 <Phone className="w-5 h-5 text-orange-400" />
                 <div>
-                    <p>Biblio Atawhid</p>
-                    <p>Hay Mohammadi, Agadir 80000</p>
-                    <p>Maroc</p>
-                    <a 
-                      href="https://maps.app.goo.gl/LPi9PugghDnX8M3C6" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-orange-400 hover:text-orange-300 text-sm"
-                    >
-                      Voir sur Google Maps
-                    </a>
                   <span>06 04 41 53 02</span>
                 </div>
-                </div>
-              </div>
-              <div className="flex items-center space-x-3">
-                <Mail className="w-5 h-5 text-orange-400" />
-                <span>biblioatawhid@gmail.com</span>
-              </div>
-              <div className="flex items-start space-x-3">
-                <MapPin className="w-5 h-5 text-orange-400 mt-1" />
-                <span>مكتبة التوحيد<br />Librairie Atawhid<br />Maroc</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Phone className="w-5 h-5 text-orange-400" />
                 <span>06 06 31 33 86</span>
+              </div>
             </div>
+            <div className="flex items-center space-x-3">
+              <Mail className="w-5 h-5 text-orange-400" />
+              <span>biblioatawhid@gmail.com</span>
+            </div>
+            <div className="flex items-start space-x-3">
+              <MapPin className="w-5 h-5 text-orange-400 mt-1" />
+              <div>
+                <p>Biblio Atawhid</p>
+                <p>Témara 12000</p>
+                <p>Maroc</p>
+                <a
+                  href="https://www.google.com/maps/place/%D9%85%D9%83%D8%AA%D8%A8%D8%A9+%D8%A7%D9%84%D8%AA%D9%88%D8%AD%D9%8A%D8%AF%E2%80%AD/@33.8650722,-6.9286219,17z/data=!3m1!4b1!4m6!3m5!1s0xda70f437f835e1f:0x88cbf391fb4a6605!8m2!3d33.8650722!4d-6.926047!16s%2Fg%2F11rxhkgll0?entry=ttu&g_ep=EgoyMDI1MDcwOS4wIKXMDSoASAFQAw%3D%3D"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-orange-400 hover:text-orange-300 text-sm"
+                >
+                  Voir sur Google Maps
+                </a>
+                <br />
+              </div>
+            </div>
+
           </div>
         </div>
 
