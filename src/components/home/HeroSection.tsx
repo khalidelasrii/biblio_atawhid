@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, BookOpen, Printer, ShoppingBag } from 'lucide-react';
+import { ArrowRight, BookOpen, Printer } from 'lucide-react';
 import { Button } from '../ui/Button';
 
 export const HeroSection: React.FC = () => {
