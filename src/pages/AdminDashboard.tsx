@@ -8,12 +8,13 @@ import {
     LogOut,
     Eye,
     ShoppingBag,
-
+    Download,
+    Mail
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { ProductService, MessageService } from '../services/dataService';
-import { CartService } from '../services/cartService';
-import { Product, Message, Order } from '../types';
+import { OrderService, OrderData } from '../services/orderService';
+import { Product, Message } from '../types';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
 import ProductList from '../components/admin/ProductList';
@@ -23,7 +24,7 @@ const AdminDashboard: React.FC = () => {
     const { currentUser, signOut } = useAuth();
     const [products, setProducts] = useState<Product[]>([]);
     const [messages, setMessages] = useState<Message[]>([]);
-    const [orders, setOrders] = useState<Order[]>([]);
+    const [orders, setOrders] = useState<OrderData[]>([]);
     const [unreadCount, setUnreadCount] = useState(0);
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState<'overview' | 'products' | 'messages' | 'orders'>('overview');
@@ -38,7 +39,7 @@ const AdminDashboard: React.FC = () => {
             const [productsData, messagesData, ordersData, unreadCountData] = await Promise.all([
                 ProductService.getAllProducts(),
                 MessageService.getAllMessages(),
-                CartService.getAllOrders(),
+                OrderService.getAllOrders(),
                 MessageService.getUnreadCount()
             ]);
 
@@ -73,13 +74,22 @@ const AdminDashboard: React.FC = () => {
         }
     };
 
-    const handleUpdateOrderStatus = async (orderId: string, newStatus: Order['currentStatus']) => {
+    const handleUpdateOrderStatus = async (orderId: string, newStatus: OrderData['currentStatus']) => {
         try {
-            await CartService.updateOrderStatus(orderId, newStatus);
+            await OrderService.updateOrderStatus(orderId, newStatus);
             toast.success('Statut de la commande mis à jour');
             loadData(); // Recharger les données
         } catch (error: any) {
             toast.error('Erreur lors de la mise à jour du statut');
+        }
+    };
+
+    const handleDownloadOrderPDF = async (orderId: string, orderNumber: string) => {
+        try {
+            await OrderService.downloadOrderPDF(orderId, orderNumber);
+            toast.success('PDF téléchargé avec succès');
+        } catch (error: any) {
+            toast.error('Erreur lors du téléchargement du PDF');
         }
     };
 
@@ -329,48 +339,119 @@ const AdminDashboard: React.FC = () => {
                                 Commandes ({orders.length})
                             </h2>
 
-                            <div className="bg-white shadow overflow-hidden sm:rounded-md">
-                                <ul className="divide-y divide-gray-200">
-                                    {orders.map((order) => (
-                                        <li key={order.id}>
-                                            <div className="px-4 py-4 sm:px-6">
-                                                <div className="flex items-center justify-between">
-                                                    <div>
-                                                        <p className="text-sm font-medium text-gray-900">
-                                                            Commande #{order.orderNumber}
-                                                        </p>
-                                                        <p className="text-sm text-gray-500">
-                                                            {order.customerInfo.name} - {order.customerInfo.email}
-                                                        </p>
-                                                    </div>
-                                                    <div className="flex items-center space-x-4">
-                                                        <span className="text-sm font-medium text-gray-900">
-                                                            {order.totalAmount} DH
-                                                        </span>
-                                                        <select
-                                                            value={order.currentStatus}
-                                                            onChange={(e) => handleUpdateOrderStatus(order.id, e.target.value as Order['currentStatus'])}
-                                                            className="text-sm border-gray-300 rounded-md"
-                                                        >
-                                                            <option value="pending">En attente</option>
-                                                            <option value="confirmed">Confirmée</option>
-                                                            <option value="processing">En préparation</option>
-                                                            <option value="shipped">Expédiée</option>
-                                                            <option value="delivered">Livrée</option>
-                                                            <option value="cancelled">Annulée</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div className="mt-2">
-                                                    <p className="text-sm text-gray-600">
-                                                        {order.items.length} article{order.items.length > 1 ? 's' : ''} -
-                                                        Créée le {order.createdAt.toLocaleDateString()}
+                            <div className="space-y-4">
+                                {orders.map((order) => (
+                                    <Card key={order.id} className="p-6">
+                                        <div className="space-y-4">
+                                            {/* En-tête de commande */}
+                                            <div className="flex items-center justify-between">
+                                                <div>
+                                                    <h3 className="text-lg font-semibold text-gray-900">
+                                                        Commande #{order.orderNumber}
+                                                    </h3>
+                                                    <p className="text-sm text-gray-500">
+                                                        Créée le {order.createdAt.toLocaleDateString()} à {order.createdAt.toLocaleTimeString()}
                                                     </p>
                                                 </div>
+                                                <div className="flex items-center space-x-3">
+                                                    <span className="text-xl font-bold text-orange-600">
+                                                        {order.totalAmount} DH
+                                                    </span>
+                                                    <Button
+                                                        onClick={() => order.id && handleDownloadOrderPDF(order.id, order.orderNumber)}
+                                                        size="sm"
+                                                        variant="outline"
+                                                        className="flex items-center space-x-1"
+                                                    >
+                                                        <Download className="w-4 h-4" />
+                                                        <span>PDF</span>
+                                                    </Button>
+                                                </div>
                                             </div>
-                                        </li>
-                                    ))}
-                                </ul>
+
+                                            {/* Informations client */}
+                                            <div className="bg-gray-50 rounded-lg p-4">
+                                                <h4 className="font-medium text-gray-900 mb-2">Informations client</h4>
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    <div>
+                                                        <p className="text-sm text-gray-600">Nom: <span className="font-medium text-gray-900">{order.customerInfo.name}</span></p>
+                                                        <p className="text-sm text-gray-600">Email: <span className="font-medium text-gray-900">{order.customerInfo.email}</span></p>
+                                                        <p className="text-sm text-gray-600">Téléphone: <span className="font-medium text-gray-900">{order.customerInfo.phone}</span></p>
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-sm text-gray-600">Adresse:</p>
+                                                        <p className="text-sm font-medium text-gray-900">
+                                                            {order.shippingAddress.address}<br />
+                                                            {order.shippingAddress.city}, {order.shippingAddress.postalCode}<br />
+                                                            {order.shippingAddress.country}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* Articles commandés */}
+                                            <div>
+                                                <h4 className="font-medium text-gray-900 mb-2">Articles commandés</h4>
+                                                <div className="space-y-2">
+                                                    {order.items.map((item, index) => (
+                                                        <div key={index} className="flex items-center justify-between py-2 border-b border-gray-200 last:border-b-0">
+                                                            <div className="flex items-center space-x-3">
+                                                                <img
+                                                                    src={item.product.images?.[0] || '/placeholder-book.jpg'}
+                                                                    alt={item.product.name}
+                                                                    className="w-12 h-12 object-cover rounded border"
+                                                                />
+                                                                <div>
+                                                                    <p className="font-medium text-gray-900">{item.product.name}</p>
+                                                                    <p className="text-sm text-gray-500">
+                                                                        Quantité: {item.quantity} × {item.price} DH
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                            <span className="font-medium text-gray-900">
+                                                                {(item.quantity * item.price).toFixed(2)} DH
+                                                            </span>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+
+                                            {/* Paiement et statut */}
+                                            <div className="flex items-center justify-between">
+                                                <div>
+                                                    <p className="text-sm text-gray-600">Méthode de paiement:</p>
+                                                    <p className="font-medium text-gray-900">
+                                                        {order.paymentMethod.type === 'cash_on_delivery' ? 'Paiement à la livraison' : order.paymentMethod.type}
+                                                    </p>
+                                                </div>
+                                                <div className="flex items-center space-x-2">
+                                                    <label className="text-sm font-medium text-gray-700">Statut:</label>
+                                                    <select
+                                                        value={order.currentStatus}
+                                                        onChange={(e) => order.id && handleUpdateOrderStatus(order.id, e.target.value as OrderData['currentStatus'])}
+                                                        className="border-gray-300 rounded-md text-sm focus:ring-orange-500 focus:border-orange-500"
+                                                    >
+                                                        <option value="pending">En attente</option>
+                                                        <option value="confirmed">Confirmée</option>
+                                                        <option value="processing">En préparation</option>
+                                                        <option value="shipped">Expédiée</option>
+                                                        <option value="delivered">Livrée</option>
+                                                        <option value="cancelled">Annulée</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            {/* Notes */}
+                                            {order.notes && (
+                                                <div className="bg-blue-50 rounded-lg p-3">
+                                                    <h5 className="text-sm font-medium text-blue-900 mb-1">Notes de commande:</h5>
+                                                    <p className="text-sm text-blue-800">{order.notes}</p>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </Card>
+                                ))}
+
                                 {orders.length === 0 && (
                                     <div className="text-center py-12">
                                         <ShoppingBag className="mx-auto h-12 w-12 text-gray-400" />

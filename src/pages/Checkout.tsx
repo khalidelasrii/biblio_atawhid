@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, CreditCard, Truck, CheckCircle } from 'lucide-react';
 import { useSimpleCart } from '../contexts/SimpleCartContext';
 import { useAuth } from '../contexts/AuthContext';
+import { OrderService } from '../services/orderService';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { ShippingAddress, PaymentMethod } from '../types';
@@ -28,6 +29,8 @@ const Checkout = () => {
     const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>({
         type: 'cash_on_delivery'
     });
+
+    const [notes, setNotes] = useState('');
 
     const formatPrice = (price: number) => {
         return new Intl.NumberFormat('fr-MA', {
@@ -57,11 +60,21 @@ const Checkout = () => {
     const handleOrderConfirmation = async () => {
         try {
             setLoading(true);
-            // Simulate order creation - you'll need to implement this with your backend
-            const orderNumber = 'ORD-' + Date.now();
-            toast.success(`Commande créée avec succès! Numéro: ${orderNumber}`);
-            clearCart(); // Clear the cart after successful order
-            navigate('/order-success', { state: { orderNumber } });
+
+            // Créer la commande avec le nouveau service
+            const order = await OrderService.createOrder(
+                items.map(item => ({
+                    product: item.product,
+                    quantity: item.quantity
+                })),
+                shippingAddress,
+                paymentMethod,
+                notes
+            );
+
+            toast.success(`Commande créée avec succès! Numéro: ${order.orderNumber}`);
+            clearCart(); // Vider le panier après la commande
+            navigate('/order-success', { state: { order } });
         } catch (error: any) {
             console.error('Erreur lors de la création de la commande:', error);
             toast.error('Erreur lors de la création de la commande');
@@ -187,6 +200,19 @@ const Checkout = () => {
                                             value={shippingAddress.country}
                                             onChange={(e) => setShippingAddress({ ...shippingAddress, country: e.target.value })}
                                             disabled
+                                        />
+                                    </div>
+
+                                    <div className="mt-4">
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                                            Notes de commande (optionnel)
+                                        </label>
+                                        <textarea
+                                            value={notes}
+                                            onChange={(e) => setNotes(e.target.value)}
+                                            placeholder="Instructions de livraison, demandes spéciales..."
+                                            rows={3}
+                                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                                         />
                                     </div>
 
