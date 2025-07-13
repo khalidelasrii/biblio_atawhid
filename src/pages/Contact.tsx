@@ -3,6 +3,8 @@ import { Phone, Mail, MapPin, Clock, Send } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { Card } from '../components/ui/Card';
+import { MessageService } from '../services/dataService';
+import toast from 'react-hot-toast';
 
 export const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -12,11 +14,42 @@ export const Contact: React.FC = () => {
     subject: '',
     message: ''
   });
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Contact form submitted:', formData);
-    // Implémenter l'envoi du formulaire
+
+    if (!formData.name || !formData.email || !formData.subject || !formData.message) {
+      toast.error('Veuillez remplir tous les champs obligatoires');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await MessageService.addMessage({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        subject: formData.subject,
+        message: formData.message
+      });
+
+      toast.success('Message envoyé avec succès ! Nous vous répondrons bientôt.');
+
+      // Réinitialiser le formulaire
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        subject: '',
+        message: ''
+      });
+    } catch (error: any) {
+      console.error('Erreur envoi message:', error);
+      toast.error('Erreur lors de l\'envoi du message. Veuillez réessayer.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -204,8 +237,17 @@ export const Contact: React.FC = () => {
               />
             </div>
 
-            <Button type="submit" className="w-full" icon={<Send className="w-4 h-4" />}>
-              Envoyer le message
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={loading}
+              icon={loading ? (
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+              ) : (
+                <Send className="w-4 h-4" />
+              )}
+            >
+              {loading ? 'Envoi en cours...' : 'Envoyer le message'}
             </Button>
           </form>
         </Card>

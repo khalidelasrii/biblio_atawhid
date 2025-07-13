@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Création Compte Admin - Biblio Al-Tawhid</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        button {
+            background: #f97316;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #ea580c;
+        }
+
+        .success {
+            color: green;
+        }
+
+        .error {
+            color: red;
+        }
+
+        .instructions {
+            background: #f0f9ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🔐 Création du Compte Administrateur</h1>
+
+    <div class="instructions">
+        <h3>Instructions :</h3>
+        <ol>
+            <li>Remplissez le formulaire ci-dessous avec vos informations d'administrateur</li>
+            <li>Cliquez sur "Créer le compte administrateur"</li>
+            <li>Une fois créé, vous pourrez vous connecter sur <strong>/admin/login</strong></li>
+            <li><strong>⚠️ Supprimez ce fichier après utilisation pour la sécurité</strong></li>
+        </ol>
+    </div>
+
+    <form id="adminForm">
+        <div class="form-group">
+            <label for="email">Email Administrateur :</label>
+            <input type="email" id="email" required placeholder="admin@exemple.com">
+        </div>
+
+        <div class="form-group">
+            <label for="password">Mot de passe :</label>
+            <input type="password" id="password" required placeholder="Mot de passe sécurisé">
+            <small>Minimum 6 caractères, incluez majuscules, minuscules et chiffres</small>
+        </div>
+
+        <div class="form-group">
+            <label for="displayName">Nom d'affichage :</label>
+            <input type="text" id="displayName" required placeholder="Administrateur Biblio Al-Tawhid">
+        </div>
+
+        <button type="submit">Créer le compte administrateur</button>
+    </form>
+
+    <div id="result"></div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Configuration Firebase (remplacez par vos vraies valeurs)
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { getFirestore, doc, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        // Configuration Firebase - REMPLACEZ PAR VOS VRAIES CLÉS
+        const firebaseConfig = {
+            apiKey: "AIzaSyD2eNYhjb_pgLMD_QYhixsB8-4HQjL-uIk",
+            authDomain: "tsss-abbc8.firebaseapp.com",
+            projectId: "tsss-abbc8",
+            storageBucket: "tsss-abbc8.firebasestorage.app",
+            messagingSenderId: "290435159076",
+            appId: "1:290435159076:web:e9146cd31b365c12a534b1"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const form = document.getElementById('adminForm');
+        const result = document.getElementById('result');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const displayName = document.getElementById('displayName').value;
+
+            try {
+                result.innerHTML = '<p>Création du compte en cours...</p>';
+
+                // Créer l'utilisateur avec Firebase Auth
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // Sauvegarder les données admin dans Firestore
+                await setDoc(doc(db, 'admins', user.uid), {
+                    id: user.uid,
+                    email: user.email,
+                    displayName: displayName,
+                    role: 'admin',
+                    createdAt: serverTimestamp(),
+                    lastLogin: serverTimestamp()
+                });
+
+                result.innerHTML = `
+                    <div class="success">
+                        <h3>✅ Compte administrateur créé avec succès !</h3>
+                        <p><strong>Email :</strong> ${email}</p>
+                        <p><strong>Nom :</strong> ${displayName}</p>
+                        <p><strong>ID :</strong> ${user.uid}</p>
+                        <br>
+                        <p>🎉 Vous pouvez maintenant vous connecter sur <strong>/admin/login</strong></p>
+                        <p>⚠️ <strong>N'oubliez pas de supprimer ce fichier pour la sécurité !</strong></p>
+                    </div>
+                `;
+
+                form.style.display = 'none';
+
+            } catch (error) {
+                console.error('Erreur:', error);
+
+                let errorMessage = 'Erreur lors de la création du compte : ' + error.message;
+
+                if (error.code === 'auth/email-already-in-use') {
+                    errorMessage = '✅ Ce compte existe déjà ! Vous pouvez vous connecter directement sur /admin/login';
+                } else if (error.code === 'auth/weak-password') {
+                    errorMessage = 'Le mot de passe est trop faible. Utilisez au moins 6 caractères.';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMessage = 'L\'adresse email n\'est pas valide.';
+                }
+
+                result.innerHTML = `<div class="error"><p>${errorMessage}</p></div>`;
+            }
+        });
+    </script>
+</body>
+
+</html>

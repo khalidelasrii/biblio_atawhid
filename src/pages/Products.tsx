@@ -3,7 +3,9 @@ import { Search, Filter, Grid, List } from 'lucide-react';
 import { ProductCard } from '../components/product/ProductCard';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
+import { useCart } from '../contexts/CartContext';
 import { Product } from '../types';
+import { ProductService } from '../services/dataService';
 
 export const Products: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -11,6 +13,8 @@ export const Products: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [loading, setLoading] = useState(true);
+
+  const { addToCart } = useCart();
 
   const categories = [
     { id: 'all', name: 'Tous les produits' },
@@ -83,20 +87,23 @@ export const Products: React.FC = () => {
 
   const filteredProducts = products.filter(product => {
     const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         product.description.toLowerCase().includes(searchQuery.toLowerCase());
+      product.description.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
-    
+
     return matchesSearch && matchesCategory;
   });
 
-  const handleAddToCart = (product: Product) => {
-    console.log('Adding to cart:', product);
-    // Implémenter la logique du panier
+  const handleAddToCart = async (product: Product) => {
+    try {
+      await addToCart(product, 1);
+    } catch (error) {
+      console.error('Erreur lors de l\'ajout au panier:', error);
+    }
   };
 
   const handleViewDetails = (product: Product) => {
     console.log('View details:', product);
-    // Implémenter la vue détaillée
+    // TODO: Implémenter la vue détaillée du produit
   };
 
   if (loading) {
@@ -177,11 +184,10 @@ export const Products: React.FC = () => {
 
       {/* Products Grid */}
       {filteredProducts.length > 0 ? (
-        <div className={`grid gap-6 ${
-          viewMode === 'grid' 
-            ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' 
+        <div className={`grid gap-6 ${viewMode === 'grid'
+            ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
             : 'grid-cols-1'
-        }`}>
+          }`}>
           {filteredProducts.map(product => (
             <ProductCard
               key={product.id}

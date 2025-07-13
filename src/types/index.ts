@@ -30,14 +30,24 @@ export interface OrderItem {
 
 export interface Order {
   id: string;
-  customerName: string;
-  customerPhone: string;
-  customerEmail?: string;
+  orderNumber: string; // Numéro de commande unique
+  userId?: string; // null si commande anonyme
+  customerInfo: {
+    name: string;
+    email: string;
+    phone: string;
+  };
+  shippingAddress: ShippingAddress;
   items: OrderItem[];
   totalAmount: number;
-  status: 'pending' | 'processing' | 'completed' | 'cancelled';
+  currency: string;
+  paymentMethod: PaymentMethod;
+  statusHistory: OrderStatus[];
+  currentStatus: 'pending' | 'confirmed' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
   documents?: string[];
   notes?: string;
+  trackingNumber?: string;
+  estimatedDelivery?: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -58,4 +68,66 @@ export interface Review {
   serviceType: string;
   isVisible: boolean;
   createdAt: Date;
+}
+
+export interface Message {
+  id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  subject: string;
+  message: string;
+  isRead: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface AdminUser {
+  id: string;
+  email: string;
+  displayName: string;
+  role: 'admin';
+  createdAt: Date;
+  lastLogin?: Date;
+}
+
+// Types pour le panier e-commerce
+export interface CartItem {
+  id: string;
+  product: Product;
+  quantity: number;
+  selectedOptions?: Record<string, string>; // Pour les options comme couleur, taille, etc.
+}
+
+export interface Cart {
+  id: string;
+  userId?: string; // null si panier anonyme
+  items: CartItem[];
+  totalItems: number;
+  totalPrice: number;
+  currency: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface ShippingAddress {
+  id?: string;
+  fullName: string;
+  email: string;
+  phone: string;
+  address: string;
+  city: string;
+  postalCode: string;
+  country: string;
+}
+
+export interface PaymentMethod {
+  type: 'cash_on_delivery' | 'bank_transfer' | 'card';
+  details?: Record<string, any>;
+}
+
+export interface OrderStatus {
+  status: 'pending' | 'confirmed' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+  date: Date;
+  note?: string;
 }

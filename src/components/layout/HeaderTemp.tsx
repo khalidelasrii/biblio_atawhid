@@ -199,42 +199,77 @@ export const Header = () => {
                 {/* Mobile Menu */}
                 {isMobileMenuOpen && (
                     <div className="md:hidden">
-                        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t">
+                        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-gray-50">
                             <Link
                                 to="/"
-                                className="block px-3 py-2 text-gray-700 hover:text-orange-500 transition-colors font-medium"
-                                onClick={toggleMobileMenu}
+                                className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-orange-500 hover:bg-gray-100 rounded-md"
+                                onClick={() => setIsMobileMenuOpen(false)}
                             >
                                 Accueil
                             </Link>
                             <Link
                                 to="/products"
-                                className="block px-3 py-2 text-gray-700 hover:text-orange-500 transition-colors font-medium"
-                                onClick={toggleMobileMenu}
+                                className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-orange-500 hover:bg-gray-100 rounded-md"
+                                onClick={() => setIsMobileMenuOpen(false)}
                             >
                                 Produits
                             </Link>
                             <Link
                                 to="/services"
-                                className="block px-3 py-2 text-gray-700 hover:text-orange-500 transition-colors font-medium"
-                                onClick={toggleMobileMenu}
+                                className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-orange-500 hover:bg-gray-100 rounded-md"
+                                onClick={() => setIsMobileMenuOpen(false)}
                             >
                                 Services
                             </Link>
                             <Link
                                 to="/about"
-                                className="block px-3 py-2 text-gray-700 hover:text-orange-500 transition-colors font-medium"
-                                onClick={toggleMobileMenu}
+                                className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-orange-500 hover:bg-gray-100 rounded-md"
+                                onClick={() => setIsMobileMenuOpen(false)}
                             >
                                 À propos
                             </Link>
                             <Link
                                 to="/contact"
-                                className="block px-3 py-2 text-gray-700 hover:text-orange-500 transition-colors font-medium"
-                                onClick={toggleMobileMenu}
+                                className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-orange-500 hover:bg-gray-100 rounded-md"
+                                onClick={() => setIsMobileMenuOpen(false)}
                             >
                                 Contact
                             </Link>
+
+                            {currentUser && (
+                                <div className="border-t border-gray-200 pt-4 pb-3">
+                                    <div className="flex items-center px-3">
+                                        <div className="flex-shrink-0">
+                                            <User className="w-10 h-10 text-gray-400" />
+                                        </div>
+                                        <div className="ml-3">
+                                            <div className="text-base font-medium text-gray-800">{currentUser.displayName}</div>
+                                            <div className="text-sm font-medium text-gray-500">{currentUser.email}</div>
+                                        </div>
+                                        {isAdmin && (
+                                            <Shield className="w-4 h-4 text-orange-500 ml-2" />
+                                        )}
+                                    </div>
+                                    <div className="mt-3 space-y-1 px-2">
+                                        {isAdmin && (
+                                            <button
+                                                onClick={handleAdminDashboard}
+                                                className="flex items-center w-full px-3 py-2 text-base font-medium text-gray-600 hover:text-orange-500 hover:bg-gray-100 rounded-md"
+                                            >
+                                                <Settings className="w-4 h-4 mr-2" />
+                                                Dashboard Admin
+                                            </button>
+                                        )}
+                                        <button
+                                            onClick={handleSignOut}
+                                            className="flex items-center w-full px-3 py-2 text-base font-medium text-gray-600 hover:text-orange-500 hover:bg-gray-100 rounded-md"
+                                        >
+                                            <LogOut className="w-4 h-4 mr-2" />
+                                            Se déconnecter
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
                 )}
