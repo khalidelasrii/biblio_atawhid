@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Filter, Grid, List } from 'lucide-react';
+import { Search, Grid, List } from 'lucide-react';
 import { ProductCard } from '../components/product/ProductCard';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { useCart } from '../contexts/CartContext';
 import { Product } from '../types';
-import { ProductService } from '../services/dataService';
 
 export const Products: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -185,8 +184,8 @@ export const Products: React.FC = () => {
       {/* Products Grid */}
       {filteredProducts.length > 0 ? (
         <div className={`grid gap-6 ${viewMode === 'grid'
-            ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
-            : 'grid-cols-1'
+          ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+          : 'grid-cols-1'
           }`}>
           {filteredProducts.map(product => (
             <ProductCard

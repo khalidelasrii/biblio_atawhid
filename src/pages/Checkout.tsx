@@ -10,7 +10,7 @@ import toast from 'react-hot-toast';
 
 const Checkout = () => {
     const navigate = useNavigate();
-    const { cart, getCartTotal, createOrder, clearCart } = useCart();
+    const { cart, getCartTotal, createOrder } = useCart();
     const { currentUser } = useAuth();
     const [loading, setLoading] = useState(false);
     const [step, setStep] = useState(1); // 1: Shipping, 2: Payment, 3: Confirmation
