@@ -14,6 +14,9 @@ import headImage from '../assets/head.png';
 const Home = () => {
   return (
     <div className="min-h-screen">
+      {/* Composant temporaire pour créer l'admin */}
+      {/* <CreateAdminComponent /> */}
+
       {/* Hero Section */}
       <section
         className="relative bg-gradient-to-r from-orange-500 to-orange-600 text-white"

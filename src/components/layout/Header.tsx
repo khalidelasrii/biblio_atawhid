@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Search, ShoppingCart, User, Menu, X, LogOut, Settings, Shield } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
-import { useCart } from '../../contexts/CartContext';
+import { useSimpleCart } from '../../contexts/SimpleCartContext';
 import LoginPopup from '../LoginPopup';
 import CartDrawer from '../CartDrawer';
 import toast from 'react-hot-toast';
@@ -14,9 +14,13 @@ export const Header = () => {
     const [isCartOpen, setIsCartOpen] = useState(false);
 
     const { currentUser, isAdmin, signOut } = useAuth();
-    const { getCartItemsCount } = useCart();
+    const { getCartItemsCount } = useSimpleCart();
     const navigate = useNavigate();
     const userMenuRef = useRef<HTMLDivElement>(null);
+
+    // Log de débogage
+    console.log('Header - currentUser:', currentUser);
+    console.log('Header - isAdmin:', isAdmin);
 
     // Fermer le menu utilisateur quand on clique ailleurs
     useEffect(() => {

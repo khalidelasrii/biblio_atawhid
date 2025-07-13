@@ -37,18 +37,24 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     useEffect(() => {
         const unsubscribe = AuthService.onAuthStateChanged(async (fbUser) => {
+            console.log('Auth state changed:', fbUser?.uid);
             setFirebaseUser(fbUser);
 
             if (fbUser) {
                 // Récupérer les données utilisateur
                 try {
+                    console.log('Récupération des données pour:', fbUser.uid);
                     const result = await AuthService.getUserData(fbUser);
+                    console.log('Résultat getUserData:', result);
+
                     if (result) {
                         setCurrentUser(result.user);
                         setUserType(result.type);
+                        console.log('Utilisateur défini:', result.user, 'Type:', result.type);
                     } else {
                         setCurrentUser(null);
                         setUserType(null);
+                        console.log('Aucune donnée utilisateur trouvée');
                     }
                 } catch (error) {
                     console.error('Erreur récupération données utilisateur:', error);
@@ -118,7 +124,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         signIn,
         signUp,
         signOut,
-        isAdmin: userType === 'admin',
+        isAdmin: userType === 'admin' || (firebaseUser?.uid === 'KmhMdZ9rbqTVGnqv6Cihyc0fVLU2'), // Force admin pour votre ID
         isClient: userType === 'client'
     };
 

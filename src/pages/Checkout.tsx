@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, CreditCard, Truck, CheckCircle } from 'lucide-react';
-import { useCart } from '../contexts/CartContext';
+import { useSimpleCart } from '../contexts/SimpleCartContext';
 import { useAuth } from '../contexts/AuthContext';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
@@ -10,7 +10,7 @@ import toast from 'react-hot-toast';
 
 const Checkout = () => {
     const navigate = useNavigate();
-    const { cart, getCartTotal, createOrder } = useCart();
+    const { items, getCartTotal, clearCart } = useSimpleCart();
     const { currentUser } = useAuth();
     const [loading, setLoading] = useState(false);
     const [step, setStep] = useState(1); // 1: Shipping, 2: Payment, 3: Confirmation
@@ -57,9 +57,11 @@ const Checkout = () => {
     const handleOrderConfirmation = async () => {
         try {
             setLoading(true);
-            const order = await createOrder(shippingAddress, paymentMethod);
-            toast.success(`Commande créée avec succès! Numéro: ${order.orderNumber}`);
-            navigate('/order-success', { state: { order } });
+            // Simulate order creation - you'll need to implement this with your backend
+            const orderNumber = 'ORD-' + Date.now();
+            toast.success(`Commande créée avec succès! Numéro: ${orderNumber}`);
+            clearCart(); // Clear the cart after successful order
+            navigate('/order-success', { state: { orderNumber } });
         } catch (error: any) {
             console.error('Erreur lors de la création de la commande:', error);
             toast.error('Erreur lors de la création de la commande');
@@ -68,7 +70,7 @@ const Checkout = () => {
         }
     };
 
-    if (!cart || cart.items.length === 0) {
+    if (items.length === 0) {
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
                 <div className="text-center">
@@ -309,10 +311,10 @@ const Checkout = () => {
                             <h3 className="text-lg font-bold text-gray-900 mb-4">Résumé de commande</h3>
 
                             <div className="space-y-3 mb-4">
-                                {cart.items.map((item) => (
+                                {items.map((item) => (
                                     <div key={item.id} className="flex items-center space-x-3">
                                         <img
-                                            src={item.product.images[0] || '/placeholder-book.jpg'}
+                                            src={item.product.images?.[0] || '/placeholder-book.jpg'}
                                             alt={item.product.name}
                                             className="w-12 h-12 object-cover rounded"
                                         />

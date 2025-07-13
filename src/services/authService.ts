@@ -187,22 +187,29 @@ export class AuthService {
     // Récupérer les données utilisateur sans mot de passe (pour le state management)
     static async getUserData(firebaseUser: FirebaseUser): Promise<{ user: AdminUser | User, type: 'admin' | 'client' } | null> {
         try {
+            console.log('getUserData appelé pour:', firebaseUser.uid);
+
             // Vérifier d'abord si c'est un admin
             const adminDoc = await getDoc(doc(db, 'admins', firebaseUser.uid));
+            console.log('Document admin exists:', adminDoc.exists());
 
             if (adminDoc.exists()) {
                 const adminData = adminDoc.data() as AdminUser;
+                console.log('Données admin trouvées:', adminData);
                 return { user: adminData, type: 'admin' };
             }
 
             // Sinon, vérifier si c'est un utilisateur normal
             const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
+            console.log('Document user exists:', userDoc.exists());
 
             if (userDoc.exists()) {
                 const userData = userDoc.data() as User;
+                console.log('Données user trouvées:', userData);
                 return { user: userData, type: 'client' };
             }
 
+            console.log('Aucun document trouvé pour:', firebaseUser.uid);
             return null;
         } catch (error: any) {
             console.error('Erreur récupération données utilisateur:', error);

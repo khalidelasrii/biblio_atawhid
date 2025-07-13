@@ -8,8 +8,8 @@ const createInitialAdmin = async () => {
         console.log('Création du compte administrateur...');
 
         // Remplacez ces valeurs par vos vraies informations
-        const email = 'admin@biblioatawhid.com'; // Votre email admin
-        const password = 'VotreMotDePasseSecurise123!'; // Votre mot de passe sécurisé
+        const email = 'khalid@atawhid.ma'; // Votre email admin
+        const password = 'admin123'; // Votre mot de passe sécurisé
         const displayName = 'Administrateur Biblio Al-Tawhid';
 
         const adminUser = await AuthService.createAdmin(email, password, displayName);
@@ -33,6 +33,6 @@ const createInitialAdmin = async () => {
 };
 
 // Décommentez la ligne suivante et exécutez ce script pour créer votre admin
-// createInitialAdmin();
+createInitialAdmin();
 
 export { createInitialAdmin };
